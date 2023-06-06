@@ -1,0 +1,60 @@
+.text-center {
+	text-align: center;
+}
+
+#lift-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.input-group {
+	margin: 8px 0;
+}
+
+.lift-container {
+	display: flex;
+	height: 75px;
+	width: 75px;
+	gap: 0.75px;
+	justify-content: space-between;
+	border: 1px solid #12a6ab;
+	background-color: #0a5b5e;
+}
+
+.lift-part {
+	width: 100%;
+	height: 100%;
+	background-color: #12d2d9;
+	transition: width 1s;
+}
+
+.lift-container:hover .lift-part {
+	width: 0%;
+}
+
+.floor-details {
+	display: flex;
+	align-items: center;
+}
+
+.lift-group {
+	display: flex;
+	gap: 25px;
+}
+.floor-container {
+	align-items: center;
+	padding: 0 8px;
+	display: flex;
+	height: 75px;
+	border: 1px solid brown;
+}
+
+.direction-button-group {
+	margin-inline: 15px 30px;
+}
+
+.back-button {
+	display: none;
+	margin-bottom: 20px;
+}
