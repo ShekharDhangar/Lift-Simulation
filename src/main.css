@@ -26,7 +26,7 @@
 	width: 100%;
 	height: 100%;
 	background-color: #12d2d9;
-	transition: width 1s;
+	transition: width 2s;
 }
 
 .lift-container:hover .lift-part {
