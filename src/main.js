@@ -12,6 +12,8 @@ form.addEventListener("submit", (e) => {
 		alert("Floor value cannot be less than lift value");
 	} else if (floorInputValue > 10 || liftInputValue > 10) {
 		alert("Floor value or Lift value cannot be more than 10");
+	} else if (floorInputValue <= 0 || liftInputValue <= 0) {
+		alert("Floor value or Lift value cannot be less than 1");
 	} else {
 		simulationContainer.innerHTML = "";
 		backButton.style.display = "block";
