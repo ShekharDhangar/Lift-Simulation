@@ -53,8 +53,8 @@ function handleFormSubmit(e) {
 			floorIDText.classList.add("floor-no-text");
 			liftGroup.classList.add("lift-group");
 
-			upDirectionButton.addEventListener("click", (e) => upBtnHandler(e));
-			downDirectionButton.addEventListener("click", (e) => downBtnHandler(e));
+			upDirectionButton.addEventListener("click", (e) => liftBtnHandler(e, true));
+			downDirectionButton.addEventListener("click", (e) => liftBtnHandler(e, false));
 
 			directionButtonGroup.classList.add("direction-button-group");
 
@@ -95,20 +95,15 @@ function handleFormSubmit(e) {
 }
 
 function moveLift(targetFloor, idleLift, direction) {
-	const liftElement = document.getElementById(`lift-${idleLift.id}`);
+	const liftElement = document.getElementById(`lift-${idleLift}`);
 	const floorHeight = document.getElementById("floor-0").clientHeight + 2;
 	const distanceToTravel = Math.abs(targetFloor) * floorHeight;
 
-	const duration = Math.abs(idleLift.currentFloor - targetFloor) * 1000;
+	const duration = Math.abs(dataStore.liftState[idleLift].currentFloor - targetFloor) * 1000;
 
 	// update lift state
-	dataStore.liftState.reduce((acc, curr, idx) => {
-		if (curr.id === idleLift.id) {
-			acc[idx].idle = false;
-			acc[idx].currentFloor = parseInt(targetFloor);
-		}
-		return acc;
-	}, dataStore.liftState);
+	dataStore.liftState[idleLift].idle = false;
+	dataStore.liftState[idleLift].currentFloor = parseInt(targetFloor);
 
 	liftElement.style.transition = `transform ${duration / 1000}s linear`;
 	liftElement.style.transform = `translateY(-${distanceToTravel}px)`;
@@ -117,34 +112,62 @@ function moveLift(targetFloor, idleLift, direction) {
 		liftElement.classList.add("open");
 		setTimeout(() => {
 			liftElement.classList.remove("open");
-			dataStore.liftState.reduce((acc, curr, idx) => {
-				if (curr.id === idleLift.id) {
-					acc[idx].idle = true;
+
+			setTimeout(() => {
+				dataStore.liftState[idleLift].idle = true;
+
+				if (dataStore.simulationQueue.length > 0) {
+					const nextRequest = dataStore.simulationQueue.shift();
+					const { targetFloor, direction } = nextRequest;
+					const lift = getIdleLift(targetFloor);
+					if (lift === null) {
+						let intervalId = setInterval(() => {
+							let re = getIdleLift(targetFloor);
+							if (re !== null) {
+								moveLift(targetFloor, re, direction);
+								clearInterval(intervalId);
+							}
+						});
+					} else {
+						moveLift(targetFloor, lift, direction);
+					}
 				}
-				return acc;
-			}, dataStore.liftState);
+			}, 2500);
 		}, 2500);
 	}, duration);
 }
 
-function getIdleLift(index) {
-	return dataStore.liftState.reduce(function (prev, curr) {
-		return Math.abs(curr.currentFloor - index) < Math.abs(prev.currentFloor - index) ? curr : prev;
+function getIdleLift(targetFloor) {
+	let nearestLift = null;
+	let minDistance = Infinity;
+	Array.from(dataStore.liftState).forEach((lift, idx) => {
+		if (lift.idle) {
+			const currentFloor = parseInt(lift.currentFloor);
+			const distance = Math.abs(currentFloor - targetFloor);
+			if (distance < minDistance) {
+				minDistance = distance;
+				nearestLift = idx;
+			}
+		}
 	});
+
+	return nearestLift;
 }
 
-function upBtnHandler(e) {
+function liftBtnHandler(e, isUP) {
 	const targetedFloor = e.target.id.split("-")[1];
 	const idleLift = getIdleLift(targetedFloor);
-
-	moveLift(targetedFloor, idleLift, "UP");
-}
-
-function downBtnHandler(e) {
-	const targetedFloor = e.target.id.split("-")[1];
-	const idleLift = getIdleLift(targetedFloor);
-
-	moveLift(targetedFloor, idleLift, "DOWN");
+	if (idleLift === null) {
+		let intervalId = setInterval(() => {
+			let avialbleLift = getIdleLift(targetedFloor);
+			if (avialbleLift !== null) {
+				moveLift(targetedFloor, avialbleLift, isUP ? "UP" : "DOWN");
+				clearInterval(intervalId);
+			}
+		});
+	} else {
+		moveLift(targetedFloor, idleLift, isUP ? "UP" : "DOWN");
+	}
 }
 
 function init() {
