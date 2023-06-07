@@ -26,10 +26,11 @@
 	width: 100%;
 	height: 100%;
 	background-color: #12d2d9;
-	transition: width 2s;
+	overflow: hidden;
+	transition: all 2s linear;
 }
 
-.lift-container:hover .lift-part {
+.lift-container.open .lift-part {
 	width: 0%;
 }
 
@@ -51,7 +52,7 @@
 }
 
 .direction-button-group {
-	margin-inline: 15px 30px;
+	margin-inline: 15px 70px;
 }
 
 .back-button {
