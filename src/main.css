@@ -51,17 +51,20 @@
 	padding: 0 8px;
 	display: flex;
 	height: 75px;
-	overflow-x: scroll;
 	border: 1px solid brown;
 }
 
 .direction-button-group {
-	margin-inline: 5px 60px;
-	gap: 5px;
+	margin-inline: 10px 60px;
+	gap: 10px;
 	display: flex;
 }
 
 .back-button {
 	display: none;
 	margin-bottom: 20px;
+}
+
+.down-button {
+	 transform: rotateZ(-180deg);
 }

@@ -42,7 +42,7 @@ function handleFormSubmit(e) {
 
 			floorIDText.textContent = `${currentFloor}`;
 			upDirectionButton.textContent = "⇧";
-			downDirectionButton.textContent = "⇩";
+			downDirectionButton.textContent = "⇧";
 
 			upDirectionButton.id = `floor-${currentFloor}`;
 			downDirectionButton.id = `floor-${currentFloor}`;
@@ -52,6 +52,7 @@ function handleFormSubmit(e) {
 			floorDetails.classList.add("floor-details");
 			floorIDText.classList.add("floor-no-text");
 			liftGroup.classList.add("lift-group");
+			downDirectionButton.classList.add("down-button")
 
 			upDirectionButton.addEventListener("click", (e) => liftBtnHandler(e, true));
 			downDirectionButton.addEventListener("click", (e) => liftBtnHandler(e, false));
