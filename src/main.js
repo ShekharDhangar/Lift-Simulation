@@ -16,12 +16,20 @@ function handleFormSubmit(e) {
 	const liftInputValue = document.getElementById("lift-input").valueAsNumber;
 
 	if (floorInputValue < liftInputValue) {
-		console.log(floorInputValue < liftInputValue, typeof floorInputValue, "value");
 		alert("Floor value cannot be less than lift value");
 	} else if (floorInputValue > 10 || liftInputValue > 10) {
 		alert("Floor value or Lift value cannot be more than 10");
 	} else if (floorInputValue <= 0 || liftInputValue <= 0) {
 		alert("Floor value or Lift value cannot be less than 1");
+	} else if (window.screen.width < 800 && liftInputValue > 7) {
+		alert("According to your screen size, lift value cannot be more than 7");
+	}
+	else if (window.screen.width < 700 && liftInputValue > 6) {
+		alert("According to your screen size, lift value cannot be more than 6");
+	} else if (window.screen.width < 500 && liftInputValue > 4) {
+		alert("According to your screen size, lift value cannot be more than 4");
+	} else if (window.screen.width < 400 && liftInputValue > 3) {
+		alert("According to your screen size, lift value cannot be more than 3");
 	} else {
 		dataStore.floorCount = floorInputValue;
 		dataStore.liftCount = liftInputValue;
