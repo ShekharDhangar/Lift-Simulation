@@ -40,9 +40,9 @@ function handleFormSubmit(e) {
 			const downDirectionButton = document.createElement("button");
 			const liftGroup = document.createElement("div");
 
-			floorIDText.textContent = `Floor ${currentFloor}`;
-			upDirectionButton.textContent = "up";
-			downDirectionButton.textContent = "down";
+			floorIDText.textContent = `${currentFloor}`;
+			upDirectionButton.textContent = "⇧";
+			downDirectionButton.textContent = "⇩";
 
 			upDirectionButton.id = `floor-${currentFloor}`;
 			downDirectionButton.id = `floor-${currentFloor}`;
@@ -107,6 +107,7 @@ function moveLift(targetFloor, idleLift, direction) {
 
 	liftElement.style.transition = `transform ${duration / 1000}s linear`;
 	liftElement.style.transform = `translateY(-${distanceToTravel}px)`;
+	// const nextRequest = dataStore.simulationQueue.shift();
 
 	setTimeout(() => {
 		liftElement.classList.add("open");
@@ -158,11 +159,17 @@ function liftBtnHandler(e, isUP) {
 	const targetedFloor = e.target.id.split("-")[1];
 	const idleLift = getIdleLift(targetedFloor);
 	if (idleLift === null) {
+		dataStore.simulationQueue.push({ targetFloor: targetedFloor, direction: isUP ? "UP" : "DOWN" })
 		let intervalId = setInterval(() => {
+
 			let avialbleLift = getIdleLift(targetedFloor);
 			if (avialbleLift !== null) {
-				moveLift(targetedFloor, avialbleLift, isUP ? "UP" : "DOWN");
-				clearInterval(intervalId);
+				let nextRequest = dataStore.simulationQueue.shift();
+				if (nextRequest) {
+					const { targetFloor, direction } = nextRequest;
+					moveLift(targetFloor, avialbleLift, direction);
+					clearInterval(intervalId);
+				}
 			}
 		});
 	} else {
