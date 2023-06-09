@@ -17,11 +17,10 @@ function handleFormSubmit(e) {
 
 	if (floorInputValue < liftInputValue) {
 		alert("Floor value cannot be less than lift value");
-	} else if (floorInputValue > 10 || liftInputValue > 10) {
-		alert("Floor value or Lift value cannot be more than 10");
+	} else if (liftInputValue > 15) {
+		alert("Lift value cannot be more than 15");
 	} else if (floorInputValue <= 0 || liftInputValue <= 0) {
 		alert("Floor value or Lift value cannot be less than 1");
-
 	} else if (window.screen.width < 350 && liftInputValue > 4) {
 		alert("According to your screen size, lift value cannot be more than 4");
 	} else if (window.screen.width < 450 && liftInputValue > 5) {
